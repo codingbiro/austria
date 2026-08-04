@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salzkammergut — 3 Hiking Days from Berghotel Predigstuhl</title>
+<title>Salzkammergut — 3 Hiking Days from Berghotel Predigstuhl (Traunsee edition)</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
   :root{
@@ -13,8 +13,8 @@
     --muted:#5C6B62;
     --line:#D8E0D6;
     --d1:#2E7D74;   /* Gosau glacier teal */
-    --d2:#4A6A33;   /* Ausseerland pine */
-    --d3:#2F6E96;   /* Attersee blue */
+    --d2:#2F6E96;   /* Attersee-Traunsee blue */
+    --d3:#4A6A33;   /* Wolfgangsee pine */
     --sign:#F0BE2E; /* Alpenverein signpost yellow */
     --signink:#241C05;
     --stone:#E5EBE3;
@@ -57,6 +57,7 @@
   }
   .leg.drive{background:var(--sign);color:var(--signink)}
   .leg.foot{background:var(--stone);color:var(--ink)}
+  .leg.rail{background:var(--ink);color:var(--paper)}
 
   /* ---------- header / signpost hero ---------- */
   header{padding:44px 0 8px}
@@ -140,9 +141,10 @@
   .meal{background:var(--paper);border:1px solid var(--line);padding:11px 13px;font-size:14px}
   .meal .eyebrow{font-size:10.5px;margin-bottom:4px;display:block}
   .daystats{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:16px;letter-spacing:.03em}
+  .daynote{font-size:14.5px;color:var(--muted);margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--line)}
 
   /* ---------- sunsets ---------- */
-  .duskrule{height:4px;background:linear-gradient(90deg,var(--d3),#E0793B,var(--sign));margin-bottom:18px}
+  .duskrule{height:4px;background:linear-gradient(90deg,var(--d2),#E0793B,var(--sign));margin-bottom:18px}
   table.sun{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-family:var(--mono);font-size:14px}
   table.sun th{font-family:var(--display);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:11.5px;color:var(--muted);text-align:left}
   table.sun th,table.sun td{padding:8px 12px;border-bottom:1px solid var(--line)}
@@ -188,7 +190,7 @@
 
 <header>
   <div class="topbar">
-    <div class="left"><span class="blaze"></span><span class="eyebrow">Salzkammergut · Field plan</span></div>
+    <div class="left"><span class="blaze"></span><span class="eyebrow">Salzkammergut · Field plan · v3 · Traunsee edition</span></div>
     <span class="eyebrow">August 2026</span>
   </div>
   <h1 class="title">Three days from<br>the Predigtstuhl</h1>
@@ -200,8 +202,8 @@
   </p>
   <nav class="signpost" aria-label="Jump to a day">
     <a href="#day1"><span>Day 1 · Gosau lakes &amp; home cliffs</span><small>drive 35 min</small></a>
-    <a href="#day2"><span>Day 2 · Loser plateau &amp; Toplitzsee</span><small>drive 50 min</small></a>
-    <a href="#day3"><span>Day 3 · Attersee bench &amp; Wolfgangsee</span><small>drive 45 min</small></a>
+    <a href="#day2"><span>Day 2 · Attersee &amp; Traunsee double</span><small>drive 45 min</small></a>
+    <a href="#day3"><span>Day 3 · Schafberg &amp; Wolfgangsee</span><small>drive 45 min</small></a>
   </nav>
 </header>
 
@@ -210,8 +212,8 @@
   <div class="sechead"><h2>The map</h2><div class="rule"></div></div>
   <div class="mapbar">
     <button class="toggle t1" data-day="1" data-on="1">Day 1 · Gosau</button>
-    <button class="toggle t2" data-day="2" data-on="1">Day 2 · Ausseerland</button>
-    <button class="toggle t3" data-day="3" data-on="1">Day 3 · Attersee–Wolfgangsee</button>
+    <button class="toggle t2" data-day="2" data-on="1">Day 2 · Attersee + Traunsee</button>
+    <button class="toggle t3" data-day="3" data-on="1">Day 3 · Wolfgangsee</button>
   </div>
   <div id="map"></div>
   <p class="mapnote">Red-white-red marker = your hotel. Dashed lines show stop order, not the driving route — tap any pin
@@ -224,12 +226,13 @@
   <div class="sechead"><h2>How your saved list splits</h2><div class="rule"></div></div>
   <div class="split">
     <div class="col c1"><h3>West · Day 1</h3>Vorderer &amp; Hinterer Gosausee, Ewige Wand, Rathlucken Hütte, Predigtstuhl, Bergwerkskogel (the small summit on the Ewige Wand loop).</div>
-    <div class="col c2"><h3>East · Day 2</h3>Loser Panoramastraße, Augstsee, Loser summit, Toplitzsee, Fischerhütte am Toplitzsee.</div>
-    <div class="col c3"><h3>North · Day 3</h3>Großer Schoberstein, Zwölferhorn (cuki bench 🪑), Ochsenkreuz, Falkensteinwand, Bleckwand, Schafberg, Bürglstein.</div>
+    <div class="col c2"><h3>Attersee + Traunsee · Day 2</h3>Großer Schoberstein, Kleiner Sonnstein (peak, hiking area <i>and</i> the Siegesbach parking — three of your pins), Badeplatz Rindbach, plus the plan-B set: Nixenfall, Europabad, Kleiner Schoberstein, Hollerberg.</div>
+    <div class="col c3"><h3>Wolfgangsee · Day 3</h3>Schafberg (cog railway), Bürglstein Rundwanderweg, Ochsenkreuz, Falkensteinwand (alternate walk). Zwölferhorn &amp; Bleckwand stay on the bench as swaps.</div>
   </div>
-  <p class="cutnote"><b>Cut for this trip:</b> the Traunsee–Ebensee cluster (Miesweg, Kleiner Sonnstein, Erlakogel, Eibenberg,
-  Hinterer Langbathsee, Baumwipfelpfad, Traunkirchen, Mostschenke im Heustadl, Rindbach) is really a fourth day, and the far-east pins
-  (Stift Admont, Strumboding-Wasserfall, Stodertal viewpoint) are 1.5 h+ each way. Spiegelsee/Reiteralm — verdict at the bottom.</p>
+  <p class="cutnote"><b>Skipped by your call:</b> the Ausseerland cluster (Loser, Augstsee, Toplitzsee, Fischerhütte) —
+  a ready-made spare day if weather kills a hike. <b>Still cut:</b> the far Traunsee-north pins (Miesweg, Erlakogel, Eibenberg,
+  Hinterer Langbathsee, Baumwipfelpfad, Traunkirchen village, Mostschenke im Heustadl) and the far-east ones
+  (Stift Admont, Strumboding-Wasserfall, Stodertal viewpoint). Spiegelsee/Reiteralm — verdict at the bottom.</p>
 </section>
 
 <!-- ================= DAY 1 ================= -->
@@ -252,80 +255,102 @@
     <div class="row"><div class="t">16:30</div><div><div class="n">Ewige Wand <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.659469,13.6284314" target="_blank" rel="noopener">map ↗</a></div>
       <div class="note">Park at Rathlucken Hütte (2 min below your hotel, same road), stroll 15–20 min to the gallery path blasted into the cliff — Hallstättersee and Krippenstein views, climbers on the wall, paragliders overhead. The Bergwerkskogel summit from your list is +45 min on the same loop.</div></div></div>
     <div class="row"><div class="t">18:15</div><div><div class="n">Dinner · Rathlucken Hütte <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.6527949,13.6266997" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Proper rustic Austrian. Cash only, kitchen closes 20:00, closed Mon–Tue. Fallback: Welterbe-Wirtshaus Steegwirt in the valley — open daily to 22:00, riverside, still runs a 400-year-old potato salad recipe.</div></div></div>
+      <div class="note">Proper rustic Austrian. Cash only, kitchen closes 20:00, closed Mon–Tue. Fallback: the hotel restaurant tonight (Steegwirt is saved for Day 2).</div></div></div>
     <div class="row"><div class="t">20:00</div><div><div class="n">Sunset · Predigtstuhl meadow</div>
       <div class="note">Right next to the hotel — your own “Naplemente? Szallas melett” note was correct, this is the spot.</div></div></div>
   </div>
+  <p class="daynote"><b>Weather backup / bonus wow:</b> 5fingers platform on Krippenstein — Dachstein cable car from Obertraun,
+  20 min from the hotel. Slots in instead of (or before) the Ewige Wand if clouds sit low on the Gosaukamm.</p>
   <div class="meals">
     <div class="meal"><span class="eyebrow">Breakfast</span>Hotel buffet + Lunchpaket</div>
     <div class="meal"><span class="eyebrow">Lunch</span>Picnic at Hinterer Gosausee (backup: kiosk at Vorderer)</div>
-    <div class="meal"><span class="eyebrow">Dinner</span>Rathlucken Hütte · cash · to 20:00 (fallback Steegwirt)</div>
+    <div class="meal"><span class="eyebrow">Dinner</span>Rathlucken Hütte · cash · to 20:00 · closed Mon–Tue</div>
   </div>
   <div class="daystats">≈ 13 km on foot · ≈ 1 h 20 driving</div>
 </section>
 
 <!-- ================= DAY 2 ================= -->
 <section class="day d2" id="day2">
-  <div class="eyebrow">Day 2 · East · ≈50 min out</div>
-  <h2>Loser plateau &amp; Toplitzsee</h2>
-  <div class="stars"><span class="star">★ Loser / Augstsee</span><span class="star">★ Toplitzsee</span></div>
+  <div class="eyebrow">Day 2 · Attersee + Traunsee · ≈45 min out</div>
+  <h2>Two summits, two lakes</h2>
+  <div class="stars"><span class="star">★ Großer Schoberstein · Attersee</span><span class="star">★ Kleiner Sonnstein · Traunsee</span></div>
   <div class="tl">
     <div class="row"><div class="t">07:30</div><div><div class="n">Breakfast + lunch pack</div>
-      <div class="legline"><span class="leg drive">Drive · 50 min incl. toll road</span></div></div></div>
-    <div class="row"><div class="t">09:15</div><div><div class="n">Loseralm car park, 1 600 m <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.6606633,13.7863247" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Via Pötschenpass and Altaussee, then the Loser Panoramastraße toll road — budget ~€20+ for the car, pay at the barrier.</div>
-      <div class="legline"><span class="leg foot">Circuit · 2 h 30 – 3 h</span></div></div></div>
-    <div class="row"><div class="t">09:30</div><div><div class="n">Loser–Augstsee circuit <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.6638024,13.7863827" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Your screenshot hike: 5.5 km past the Augstsee tarn and over the Loser summit (1 838 m) — the Altausseer See sits a vertical kilometre below, Dachstein across the valley. Inside the Totes Gebirge nature reserve: <b>no drone here</b>.</div></div></div>
-    <div class="row"><div class="t">13:00</div><div><div class="n">Lunch</div>
-      <div class="note">Summit picnic, or hot food at the Loseralm hut (open 9–17).</div>
-      <div class="legline"><span class="leg drive">Drive · 30 min</span> <span class="leg foot">Walk in · 20 min</span></div></div></div>
-    <div class="row"><div class="t">14:45</div><div><div class="n">Toplitzsee <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.6447733,13.9337819" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Park at Gößl; the lake is foot-only, a flat 1.7 km in. Dark walls, waterfalls, sunken-Nazi-gold legend. Take the Plätte boat across to the hidden Kammersee if you can — it runs with 4+ passengers.</div></div></div>
-    <div class="row"><div class="t">17:30</div><div><div class="n">Dinner · Fischerhütte am Toplitzsee <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.6418529,13.9196352" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Family-run since 1955, right at the boat landing — the almond-butter Saibling (char) on the lake terrace is the move. Currently listed closed Tue–Wed; call ahead +43 3622 8296.</div>
-      <div class="legline"><span class="leg foot">Walk out · 20 min</span> <span class="leg drive">Drive · 45 min</span></div></div></div>
-    <div class="row"><div class="t">19:50</div><div><div class="n">Home</div>
-      <div class="note">Daylight to ~20:30 — terrace sunset, or a quick hop to the Ewige Wand ledge.</div></div></div>
+      <div class="note">Big day — two climbs, two lakes, one swim. Leave sharp.</div>
+      <div class="legline"><span class="leg drive">Drive · 45 min via Bad Ischl</span></div></div></div>
+    <div class="row"><div class="t">08:45</div><div><div class="n">Parkplatz Wandergebiet Weissenbach <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.7939905,13.5383973" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Paid lot at the Attersee — ticket machine sells a 6-hour minimum.</div>
+      <div class="legline"><span class="leg foot">Loop · ≈3 h 30</span></div></div></div>
+    <div class="row"><div class="t">09:00</div><div><div class="n">Großer Schoberstein loop <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.8001925,13.5518156" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your double-screenshot hike: 6.6 km / 549 m to 1 037 m. Early lunch on the cliff-edge bench with the whole Attersee below — the couple shot of the trip. Skip the Kleiner Schoberstein extension today; the legs are booked at the next lake.</div>
+      <div class="legline"><span class="leg drive">Drive · 30 min via Mitterweißenbach</span></div></div></div>
+    <div class="row"><div class="t">13:15</div><div><div class="n">Parkplatz für Wanderweg zum Sonnstein <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.835294,13.785842" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your saved pin at Siegesbach, right on the Traunsee shore between Ebensee and Traunkirchen. Small free lot (~15–20 cars) that fills around midday in August — if it’s full, flip the order: swim at Rindbach first, climb after (the summit in softer late light is arguably better anyway).</div>
+      <div class="legline"><span class="leg foot">Up + down · ≈2 h</span></div></div></div>
+    <div class="row"><div class="t">13:30</div><div><div class="n">Kleiner Sonnstein, 922 m <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.8166667,13.7833333" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">The Traunsee’s best short hike, and three of your pins point at it. ~500 m straight up from lake level — steep, steady, ~1 h to the cross, a few secured rocky steps near the top, sturdy shoes. The summit hangs directly over the turquoise fjord: Traunstein wall across the water, Traunkirchen’s peninsula at your feet.</div>
+      <div class="legline"><span class="leg drive">Drive · 12 min via Ebensee</span></div></div></div>
+    <div class="row"><div class="t">16:00</div><div><div class="n">Swim · Badeplatz Rindbach <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.8100795,13.7896176" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Ebensee’s lake lawn in the Traunsee’s south-east corner — easy entry, grass, the Traunstein filling the sky, parking ~€6. This is almost certainly your saved “Rindbach” and “Strand” pins.</div>
+      <div class="legline"><span class="leg drive">Drive · 50 min via Bad Ischl</span></div></div></div>
+    <div class="row"><div class="t">17:45</div><div><div class="n">Home — shower &amp; change</div>
+      <div class="legline"><span class="leg drive">Drive · 15 min</span></div></div></div>
+    <div class="row"><div class="t">18:45</div><div><div class="n">Dinner · Welterbe-Wirtshaus Steegwirt <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.6121245,13.6322453" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Riverside terrace where the lake drains into the Traun, open daily to 22:00 — order the potato salad, the recipe is 400 years old. Close to home, so no time pressure after the big day.</div></div></div>
+    <div class="row"><div class="t">20:00</div><div><div class="n">Evening · Predigtstuhl meadow</div>
+      <div class="note">After two summits, the doorstep sunset earns its keep. Still superhuman? The 35-min Gosausee alpenglow run is the upgrade.</div></div></div>
   </div>
+  <p class="daynote"><b>Plan B — storms building at lunch, or legs done after the bench?</b> Skip the Traunsee leg and run the mellow
+  original from the same morning parking lot: the flat 30-min stroll to the 80 m <b>Nixenfall</b> waterfall, then a swim at the free
+  <b>Europabad</b> lawn 300 m from the car. The Sonnstein keeps for another trip. (And if you want <i>more</i> instead: the
+  Kleiner Schoberstein extension or the Hollerberg platform, both on your list, are the add-ons.)</p>
   <div class="meals">
     <div class="meal"><span class="eyebrow">Breakfast</span>Hotel buffet + Lunchpaket</div>
-    <div class="meal"><span class="eyebrow">Lunch</span>Loser summit picnic (backup: Loseralm hut, 9–17)</div>
-    <div class="meal"><span class="eyebrow">Dinner</span>Fischerhütte · closed Tue–Wed · call ahead</div>
+    <div class="meal"><span class="eyebrow">Lunch</span>Early picnic on the Schoberstein bench</div>
+    <div class="meal"><span class="eyebrow">Dinner</span>Steegwirt · open daily to 22:00</div>
   </div>
-  <div class="daystats">≈ 9 km on foot · ≈ 1 h 50 driving</div>
+  <div class="daystats">≈ 11 km on foot · ≈ 1 050 m up over two summits · ≈ 2 h 15 driving</div>
 </section>
 
 <!-- ================= DAY 3 ================= -->
 <section class="day d3" id="day3">
-  <div class="eyebrow">Day 3 · North · ≈45 min out</div>
-  <h2>Attersee bench &amp; Wolfgangsee</h2>
-  <div class="stars"><span class="star">★ Großer Schoberstein</span><span class="star">★ Zwölferhorn</span></div>
+  <div class="eyebrow">Day 3 · Wolfgangsee · ≈45 min out</div>
+  <h2>Schafberg railway &amp; the lake finale</h2>
+  <div class="stars"><span class="star">★ Schafberg 1 783 m</span><span class="star">★ Wolfgangsee</span></div>
   <div class="tl">
     <div class="row"><div class="t">07:30</div><div><div class="n">Breakfast + lunch pack</div>
-      <div class="legline"><span class="leg drive">Drive · 45 min via Bad Ischl</span></div></div></div>
-    <div class="row"><div class="t">08:45</div><div><div class="n">Parkplatz Wandergebiet Weissenbach <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.7939905,13.5383973" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Paid lot at the Attersee — ticket machine sells a 6-hour minimum.</div>
-      <div class="legline"><span class="leg foot">Loop · 3 h – 3 h 30</span></div></div></div>
-    <div class="row"><div class="t">09:00</div><div><div class="n">Großer Schoberstein loop <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.8001925,13.5518156" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Your double-screenshot hike: 6.6 km / 549 m to 1 037 m. The bench on the cliff edge with the whole Attersee below is the couple shot of the trip — eat your packed lunch there. Morning start also dodges August afternoon thunderstorms.</div>
-      <div class="legline"><span class="leg drive">Drive · 40 min via Strobl</span></div></div></div>
-    <div class="row"><div class="t">13:45</div><div><div class="n">Zwölferhorn Seilbahn, St. Gilgen <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.7654115,13.3642818" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Lift runs daily 9–17 through the season, return ticket mid-€30s. Up to 1 522 m: find the “cuki bench” 🪑, walk the easy Pillstein panorama loop (~1 h), full Wolfgangsee and lake-district view. Big paragliding launch — no drone here in the afternoon.</div>
-      <div class="legline"><span class="leg drive">Drive · 5 min</span></div></div></div>
-    <div class="row"><div class="t">17:15</div><div><div class="n">Ochsenkreuz <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.7625234,13.3867132" target="_blank" rel="noopener">map ↗</a></div>
-      <div class="note">Your saved swim spot on the lake road home — turquoise bay, short walk from the road, post-hike dip in golden-hour light.</div>
-      <div class="legline"><span class="leg drive">Drive · 35 min via Bad Ischl</span></div></div></div>
+      <div class="note">Train tickets should already be booked online (see practical notes) — slots sell out in August.</div>
+      <div class="legline"><span class="leg drive">Drive · 45 min via Bad Ischl &amp; Strobl</span></div></div></div>
+    <div class="row"><div class="t">08:50</div><div><div class="n">SchafbergBahn valley station, St. Wolfgang <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.7398845,13.4394756" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Station lot has ~300 spaces, just past the village centre toward Ried. Be at the gate ~20 min early to pick seats — going up, the best views start on the left and switch to the right near the top.</div>
+      <div class="legline"><span class="leg rail">Cog railway · 35 min</span></div></div></div>
+    <div class="row"><div class="t">09:25</div><div><div class="n">First train up</div>
+      <div class="note">Austria’s steepest cog railway, running since 1893 — 5.85 km, 1 190 vertical metres straight out of the village.</div></div></div>
+    <div class="row"><div class="t">10:00</div><div><div class="n">Schafbergspitze <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.776267,13.433777" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">The postcard: Himmelspforte ledge and a 360° panorama over eleven lakes on a clear day — Wolfgangsee, Mondsee and Attersee all at once. Picnic at the top (skip the summit hotel restaurant — the reviews are grim). Hiker option: walk down to the Schafbergalm middle station (~1 h) and reboard there.</div>
+      <div class="legline"><span class="leg rail">Train down · 35 min</span></div></div></div>
+    <div class="row"><div class="t">13:40</div><div><div class="n">St. Wolfgang village</div>
+      <div class="note">Ten minutes for the pilgrimage church — Michael Pacher’s carved winged altar (1481) is world class and free to see.</div>
+      <div class="legline"><span class="leg drive">Drive · 10 min</span></div></div></div>
+    <div class="row"><div class="t">14:15</div><div><div class="n">Bürglstein Rundwanderweg <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.7240852,13.4783471" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your saved pin: an easy 1–1.5 h loop around the little lakeside hill between St. Wolfgang and Strobl — cliffs, benches, water views the whole way. Street parking by the trail gate. Alternative: the Falkensteinwand pilgrim trail from Fürberg (~1.5 h) for the chapel built into the cliff.</div>
+      <div class="legline"><span class="leg drive">Drive · 18 min via Strobl</span></div></div></div>
+    <div class="row"><div class="t">16:00</div><div><div class="n">Ochsenkreuz <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.7625234,13.3867132" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your saved swim spot — turquoise bay, short walk from the road, last swim of the trip in the long afternoon light.</div>
+      <div class="legline"><span class="leg drive">Drive · 40 min via Bad Ischl</span></div></div></div>
     <div class="row"><div class="t">18:45</div><div><div class="n">Farewell dinner · Weissenbachwirt <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.6619593,13.6050532" target="_blank" rel="noopener">map ↗</a></div>
       <div class="note">Your saved local Wirtshaus — note it’s in Weißenbach <i>bei Bad Goisern</i>, 10 min from the hotel, not at the Attersee. Huge honest portions, cheap, cash only. Open Thu–Sat to 22:00, Sun to 18:00, closed Mon–Wed. Fallback: Steegwirt or the hotel restaurant.</div></div></div>
     <div class="row"><div class="t">20:15</div><div><div class="n">Home — last sunset from the terrace</div></div></div>
   </div>
+  <p class="daynote"><b>Sold out?</b> The Zwölferhorn cable car in St. Gilgen is the no-reservation fallback (daily 9–17)
+  — and the cuki bench 🪑 lives up there. <b>Waking up hungry for one more summit?</b> Swap the whole day for the
+  Bleckwand rock window: 12.2 km / 1 049 m out-and-back from near Strobl, then Ochsenkreuz and dinner as planned.</p>
   <div class="meals">
     <div class="meal"><span class="eyebrow">Breakfast</span>Hotel buffet + Lunchpaket</div>
-    <div class="meal"><span class="eyebrow">Lunch</span>Packed lunch on the Schoberstein bench</div>
+    <div class="meal"><span class="eyebrow">Lunch</span>Picnic at the Himmelspforte</div>
     <div class="meal"><span class="eyebrow">Dinner</span>Weissenbachwirt · Thu–Sun · cash</div>
   </div>
-  <div class="daystats">≈ 9 km on foot · ≈ 2 h 10 driving</div>
+  <div class="daystats">≈ 4–6 km on foot · ≈ 1 h 55 driving · 2 × 35 min railway</div>
 </section>
 
 <!-- ================= SUNSETS ================= -->
@@ -348,8 +373,8 @@
   <ul class="spotlist">
     <li><b>Predigtstuhl meadow / hotel terrace</b> <span class="m">0–5 min</span> — west-facing over the Goiserer valley, paragliders in the last light. Doorstep option, use it daily.</li>
     <li><b>Ewige Wand gallery</b> <span class="m">5 min + 15 min walk</span> — the cliff path glows and you look down the whole valley. Bring a headlamp for the walk back.</li>
-    <li><b>Hallstättersee west shore at Steeg / Untersee</b> <span class="m">~15 min</span> — long evening light straight down the lake, far fewer people than Hallstatt.</li>
-    <li><b>Vorderer Gosausee</b> <span class="m">~35 min — 5 over the cap, worth it once</span> — the sun sets behind you and the Gosaukamm / Bischofsmütze burns pink for ~15 minutes <i>after</i> sunset. The alpenglow evening here beats most sunsets.</li>
+    <li><b>Hallstättersee west shore at Steeg / Untersee</b> <span class="m">~15 min</span> — long evening light straight down the lake, far fewer people than Hallstatt. Two minutes from your Day 2 dinner table.</li>
+    <li><b>Vorderer Gosausee</b> <span class="m">~35 min — 5 over the cap, worth it once</span> — the sun sets behind you and the Gosaukamm / Bischofsmütze burns pink for ~15 minutes <i>after</i> sunset. The upgrade option any clear evening.</li>
   </ul>
 </section>
 
@@ -360,50 +385,60 @@
     <b>Rules first — this region is a minefield.</b> Airspace is federal (Austro Control) but nature protection is state law,
     and flying in Naturschutzgebiete, national parks and Natura-2000 areas is mostly banned or strictly regulated —
     sub-250 g does not exempt you. Register as an operator, carry insurance, and check the Austro Control
-    <b>Drone Space</b> map before every launch. Hard no-fly on this itinerary: the Loser / Augstsee circuit (nature reserve)
-    and anywhere paragliders are up (Zwölferhorn, Predigtstuhl afternoons). Dawn is your window everywhere:
-    calm air, no people, best light.
+    <b>Drone Space</b> map before every launch. Hard no-fly on this itinerary: the crowded Schafberg summit (train crowds,
+    no clean launch), anywhere paragliders are up (Predigtstuhl afternoons), and anything marked as a protected area in the app.
+    Dawn is your window everywhere: calm air, no people, best light.
   </div>
   <ul class="dronespots">
     <li><b>Vorderer Gosausee at first light</b> (Day 1) — glassy Dachstein mirror, couple standing on the flat shore path; slow 20 m top-down or pull-back reveal. Verify in Drone Space on the day; land if anyone’s around. <span class="dtag">Mini 4 Pro</span></li>
     <li><b>Predigtstuhl meadow at dawn</b> — launch from the doorstep before the paragliders wake; on inversion mornings you get a cloud sea over the Hallstättersee with the Dachstein floating behind. <span class="dtag">either</span></li>
     <li><b>Hallstättersee shore at Steeg</b> — morning mist, low passes over the water; stay clear of the village and boats. <span class="dtag">Mini 4 Pro</span></li>
-    <li><b>Schoberstein summit bench</b> (Day 3) — THE couple shot: bench, cliff edge, Attersee 600 m below. Wind on the edge gets sporty — quick orbit and top-down only. Save the Neo 2 for palm-launch follow shots on the trail below the summit. <span class="dtag">Mini 4 Pro</span></li>
+    <li><b>Schoberstein summit bench</b> (Day 2) — THE couple shot: bench, cliff edge, Attersee 600 m below. Wind on the edge gets sporty — quick orbit and top-down only. Save the Neo 2 for palm-launch follow shots on the trail below the summit. <span class="dtag">Mini 4 Pro</span></li>
+    <li><b>Kleiner Sonnstein summit</b> (Day 2) — top-down on the Traunsee’s fjord bend with the Traunstein wall behind; the small summit gets a steady flow of people at midday, so launch-orbit-land fast, or fly from the shoulder just below the cross. <span class="dtag">Mini 4 Pro</span></li>
+    <li><b>Bürglstein shoreline, Wolfgangsee</b> (Day 3) — couple on the rocky shore with the Schafberg pyramid behind; late-afternoon side light, calm water. <span class="dtag">either</span></li>
     <li><b>Ochsenkreuz bay</b> (Day 3 evening) — turquoise shallows, two people swimming, golden-hour top-down. <span class="dtag">Neo 2</span></li>
-    <li><b>Gößl meadows at Grundlsee</b> (Day 2) — open farmland, moody lake edge; launch here rather than the forested Toplitz shore, which edges the Totes Gebirge protection zone. <span class="dtag">either</span></li>
   </ul>
 </section>
 
 <!-- ================= VERDICT ================= -->
 <section id="verdict" class="verdict">
-  <div class="sechead"><h2>Your screenshots — verdict &amp; upgrades</h2><div class="rule"></div></div>
-  <p><b>In the plan:</b> Vorderer Gosausee (Day 1), Loser / Augstsee (Day 2), Schoberstein (Day 3 — sent twice, message received).</p>
-  <p><b>Bleckwand</b> (the rock window over the Wolfgangsee) is genuinely spectacular, but 12.2 km / 1 049 m out-and-back is a lot
-  for day three of three. If your legs feel great, swap it in for the Schoberstein + Zwölferhorn combo — trailhead near Strobl, ~35 min from the hotel.</p>
-  <p><b>Spiegelsee / Reiteralm</b> is the one to cut: the most photogenic of the five, but it sits on the Schladming side of the
-  Dachstein — ~1 h 20 each way, nearly 3 h of driving. Only take it if the mirror-lake shot outranks everything; it would replace the Loser morning.</p>
-  <p><b>Two upgrades not in your screenshots:</b> the <b>5fingers platform on Krippenstein</b> (Dachstein cable car from Obertraun,
-  20 min from the hotel) — arguably the region’s single best viewpoint, hanging over the Hallstättersee with almost no hiking;
-  perfect Day 1 add-on or bad-weather backup. And the <b>Miesweg</b> cliff boardwalk on the Traunsee from your saved list, which pairs with your saved
-  <b>Mostschenke im Heustadl</b> (it’s in Ebensee — open Wed–Sat from 15:00, Sun from 12:00): together they’re the natural fourth day if you ever extend.</p>
+  <div class="sechead"><h2>Your screenshots — verdict &amp; alternates</h2><div class="rule"></div></div>
+  <p><b>In the plan:</b> Vorderer Gosausee (Day 1), Schoberstein (Day 2 — sent twice, message received), the Schafberg from your saved pins
+  as the Day 3 postcard, and now the Traunsee too.</p>
+  <p><b>Why Kleiner Sonnstein won the Traunsee slot:</b> three of your saved pins point at it (the 922 m peak, the hiking area, the Siegesbach
+  parking), it’s the lake’s best effort-to-view ratio, and it sits 30 min from the Schoberstein trailhead — the only Traunsee highlight that
+  genuinely pairs with the Attersee day. The runner-up, the <b>Miesweg</b> cliff boardwalk under the Traunstein, lives at the Gmunden end —
+  1 h+ each way — and pairs with your saved Mostschenke im Heustadl for a future Traunsee day instead.</p>
+  <p><b>Out by your call:</b> the Loser / Augstsee screenshot and the Toplitzsee. They stay a ready-made spare day —
+  if a storm front kills a hiking day, that loop (Loser circuit + fish dinner at the Fischerhütte, closed Tue–Wed) is the plug-in replacement.</p>
+  <p><b>Bleckwand</b> (your rock-window screenshot) is the Day 3 swap for strong legs: 12.2 km / 1 049 m out-and-back from near Strobl.
+  <b>Zwölferhorn</b> is the Day 3 fallback if Schafberg slots sell out — no reservation needed, and the cuki bench 🪑 is up there.</p>
+  <p><b>Spiegelsee / Reiteralm</b> stays cut: the most photogenic of the five, but ~1 h 20 each way on the Schladming side of the Dachstein.
+  It deserves its own trip. <b>5fingers on Krippenstein</b> is pencilled into Day 1 as the add-on / weather backup — 20 min from the hotel,
+  arguably the region’s best viewpoint for almost no hiking.</p>
 </section>
 
 <!-- ================= PRACTICAL ================= -->
 <section id="practical">
   <div class="sechead"><h2>Practical notes</h2><div class="rule"></div></div>
   <div class="practical">
-    <p>Book all three dinners a day ahead — small kitchens, and three of them are cash-only territory, so carry euros.</p>
+    <p><b>Book the SchafbergBahn now:</b> tickets go online in advance at 5schaetze.at / ticketing.schafbergbahn.at — adult return to the summit is €61,
+    the train runs daily April 25 – November 1, first ascents ~09:25, and August slots sell out. Book both directions.</p>
+    <p><b>Day 2 is the big one:</b> two summits and ~1 050 m of climbing. Check the storm radar over lunch on the Schoberstein bench —
+    if towers are building over the Höllengebirge, take Plan B. The Sonnstein is steep with a few secured steps; sturdy shoes, and its
+    small lot fills midday (flip swim and climb if needed).</p>
+    <p>Book the dinners a day ahead — small kitchens, and Rathlucken Hütte and Weissenbachwirt are cash only, so carry euros.</p>
+    <p>Closing days to check against your actual dates: Rathlucken Hütte Mon–Tue, Weissenbachwirt Mon–Wed (Sun only to 18:00). Steegwirt is open daily.</p>
     <p>Start hikes by 09:00: beats the heat, the coach crowds at Gosausee, and the August afternoon-thunderstorm pattern.</p>
-    <p>Re-check closing days against your actual dates — Mon–Wed closures are scattered across these places (Rathlucken Mon–Tue,
-    Fischerhütte Tue–Wed, Weissenbachwirt Mon–Wed).</p>
-    <p>Budget items: Gosausee and Weissenbach parking (paid), Loser Panoramastraße toll ~€20+ per car, Zwölferhorn return mid-€30s.</p>
-    <p>All drive times are approximate and include the hotel’s mountain road; add margin on summer weekends around Hallstatt.</p>
+    <p>Budget items: paid parking at Gosausee, Weissenbach (6 h minimum), Rindbach (~€6) and the SchafbergBahn station; €61 pp for the railway.</p>
+    <p>All drive times are approximate and include the hotel’s mountain road; add margin on summer weekends around Hallstatt and St. Wolfgang.</p>
   </div>
 </section>
 
 <footer>
-  Built for a 3-night stay at Berghotel Predigstuhl, Bad Goisern · Opening hours and prices checked early Aug 2026 — verify day-of.
-  Sunset data: timeanddate.com (Bad Ischl). Lift hours: zwoelferhorn.at. Map © OpenStreetMap contributors · Topo © OpenTopoMap (CC-BY-SA).
+  Built for a 3-night stay at Berghotel Predigstuhl, Bad Goisern · v3 Traunsee edition — Kleiner Sonnstein + Rindbach swim added to Day 2 ·
+  Opening hours and prices checked early Aug 2026 — verify day-of.
+  Sunset data: timeanddate.com (Bad Ischl). Railway: 5schaetze.at. Map © OpenStreetMap contributors · Topo © OpenTopoMap (CC-BY-SA).
 </footer>
 
 </div><!-- /wrap -->
@@ -421,17 +456,18 @@
       {n:"Rathlucken Hütte", t:"18:15", lat:47.6527949, lng:13.6266997, note:"Dinner · cash only · kitchen to 20:00 · closed Mon–Tue."},
       {n:"Predigtstuhl", t:"20:00", lat:47.6595461, lng:13.6378781, note:"Sunset meadow next to the hotel."}
     ]},
-    { id:2, color:"#4A6A33", label:"Day 2 · Ausseerland", stops:[
-      {n:"Loseralm car park", t:"09:15", lat:47.6606633, lng:13.7863247, note:"Top of the toll road, 1 600 m. Hut open 9–17."},
-      {n:"Augstsee / Loser circuit", t:"09:30", lat:47.6638024, lng:13.7863827, note:"5.5 km over the 1 838 m summit. Nature reserve — no drone."},
-      {n:"Toplitzsee", t:"14:45", lat:47.6447733, lng:13.9337819, note:"Foot-only, 1.7 km from Gößl. Optional boat to Kammersee (4+ pax)."},
-      {n:"Fischerhütte am Toplitzsee", t:"17:30", lat:47.6418529, lng:13.9196352, note:"Dinner on the lake · closed Tue–Wed · +43 3622 8296."}
+    { id:2, color:"#2F6E96", label:"Day 2 · Attersee + Traunsee", stops:[
+      {n:"Parkplatz Wandergebiet Weissenbach", t:"08:45", lat:47.7939905, lng:13.5383973, note:"Paid lot, 6 h minimum ticket. Schoberstein trailhead."},
+      {n:"Großer Schoberstein", t:"09:00", lat:47.8001925, lng:13.5518156, note:"6.6 km / 549 m loop. Summit bench over the Attersee = early lunch."},
+      {n:"Parkplatz Sonnstein (Siegesbach)", t:"13:15", lat:47.835294, lng:13.785842, note:"Your saved pin — small free lakeside lot, ~15–20 cars. Full? Swim first, climb after."},
+      {n:"Kleiner Sonnstein", t:"14:30", lat:47.8166667, lng:13.7833333, note:"922 m, ~500 m straight up from the lake. Summit right over the Traunsee, Traunstein across."},
+      {n:"Badeplatz Rindbach", t:"16:00", lat:47.8100795, lng:13.7896176, note:"Traunsee swim lawn, parking ~€6 — likely your saved Rindbach/Strand pins."}
     ]},
-    { id:3, color:"#2F6E96", label:"Day 3 · Attersee–Wolfgangsee", stops:[
-      {n:"Parkplatz Wandergebiet Weissenbach", t:"08:45", lat:47.7939905, lng:13.5383973, note:"Paid lot, 6 h minimum ticket. Trailhead."},
-      {n:"Großer Schoberstein", t:"09:00", lat:47.8001925, lng:13.5518156, note:"6.6 km / 549 m loop. Summit bench over the Attersee = lunch spot."},
-      {n:"Zwölferhorn Seilbahn", t:"13:45", lat:47.7654115, lng:13.3642818, note:"Lift 9–17 daily. Cuki bench 🪑 + Pillstein loop (~1 h)."},
-      {n:"Ochsenkreuz", t:"17:15", lat:47.7625234, lng:13.3867132, note:"Turquoise bay — post-hike swim, golden hour."},
+    { id:3, color:"#4A6A33", label:"Day 3 · Wolfgangsee", stops:[
+      {n:"SchafbergBahn valley station", t:"08:50", lat:47.7398845, lng:13.4394756, note:"~300 parking spaces. Gate 20 min early; book tickets online days ahead."},
+      {n:"Schafbergspitze", t:"10:00", lat:47.776267, lng:13.433777, note:"1 783 m · Himmelspforte · eleven lakes on a clear day. Picnic up top."},
+      {n:"Bürglstein Rundwanderweg", t:"14:15", lat:47.7240852, lng:13.4783471, note:"Easy 1–1.5 h lakeside loop. Street parking by the trail gate."},
+      {n:"Ochsenkreuz", t:"16:00", lat:47.7625234, lng:13.3867132, note:"Turquoise bay — last swim of the trip."},
       {n:"Weissenbachwirt", t:"18:45", lat:47.6619593, lng:13.6050532, note:"Farewell dinner, 10 min from the hotel · cash · Thu–Sun."}
     ]}
   ];
