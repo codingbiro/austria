@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Days in Graz — City & Bärenschützklamm</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root{
+    --paper:#EFF3EE;
+    --card:#FFFFFF;
+    --ink:#1D2A24;
+    --muted:#5C6B62;
+    --line:#D8E0D6;
+    --d1:#8C3B2E;   /* Graz rooftop red — city day */
+    --d2:#4A6A33;   /* Almenland pine — gorge day */
+    --d3:#B8802F;   /* ochre — gluten-free layer */
+    --sign:#F0BE2E; /* signpost yellow */
+    --signink:#241C05;
+    --stone:#E5EBE3;
+    --blazered:#C8362B;
+    --display:"Avenir Next Condensed","AvenirNextCondensed-DemiBold","Futura","Arial Narrow",Arial,sans-serif;
+    --body:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px 64px}
+
+  .eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--muted)}
+  .blaze{display:inline-block;width:20px;height:14px;flex:none;
+    background:linear-gradient(180deg,var(--blazered) 0 33%,#fff 33% 66%,var(--blazered) 66% 100%);
+    outline:1px solid rgba(29,42,36,.35)}
+  h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.05;margin:0}
+  h2{font-size:30px;letter-spacing:.01em}
+  a{color:inherit}
+  .maplink{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--muted);white-space:nowrap}
+  .maplink:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
+  .leg{display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--display);font-weight:600;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+    padding:5px 22px 5px 12px;
+    clip-path:polygon(0 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,0 100%)}
+  .leg.drive{background:var(--sign);color:var(--signink)}
+  .leg.foot{background:var(--stone);color:var(--ink)}
+  .leg.rail{background:var(--ink);color:var(--paper)}
+
+  header{padding:44px 0 8px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:26px}
+  .topbar .left{display:flex;align-items:center;gap:10px}
+  .title{font-size:clamp(40px,8vw,64px);text-transform:uppercase;letter-spacing:.005em}
+  .basecard{margin-top:14px;font-size:16px;color:var(--muted);max-width:56ch}
+  .basecard b{color:var(--ink);font-weight:600}
+  .elev{font-family:var(--mono);font-size:13px;background:var(--ink);color:var(--paper);padding:2px 8px;border-radius:2px;white-space:nowrap}
+
+  .signpost{margin:30px 0 8px;position:relative;padding-left:26px}
+  .signpost:before{content:"";position:absolute;left:8px;top:-6px;bottom:-6px;width:7px;
+    background:linear-gradient(90deg,#7A6A52,#9c8a6e 45%,#6d5d47);border-radius:3px}
+  .signpost a{display:flex;align-items:baseline;gap:12px;justify-content:space-between;
+    background:var(--sign);color:var(--signink);text-decoration:none;
+    font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    font-size:clamp(15px,3.4vw,19px);
+    padding:10px 30px 10px 16px;margin:8px 0;max-width:560px;
+    clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%)}
+  .signpost a small{font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.05em;text-transform:none}
+  .signpost a:hover{filter:brightness(1.05)}
+
+  #map{height:460px;border:1px solid var(--line);background:#dfe7de;margin-top:14px}
+  .mapbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+  .toggle{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    border:2px solid;background:var(--card);padding:5px 12px;border-radius:999px;cursor:pointer}
+  .toggle[data-on="1"]{color:#fff}
+  .toggle.t1{border-color:var(--d1);color:var(--d1)} .toggle.t1[data-on="1"]{background:var(--d1)}
+  .toggle.t2{border-color:var(--d2);color:var(--d2)} .toggle.t2[data-on="1"]{background:var(--d2)}
+  .toggle.t3{border-color:var(--d3);color:var(--d3)} .toggle.t3[data-on="1"]{background:var(--d3)}
+  .mapnote{font-size:13.5px;color:var(--muted);margin-top:8px}
+  .hotel-icon{width:22px;height:16px;
+    background:linear-gradient(180deg,var(--blazered) 0 33%,#fff 33% 66%,var(--blazered) 66% 100%);
+    outline:2px solid #1D2A24;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+  .leaflet-popup-content{font-family:var(--body);font-size:14px;line-height:1.45;margin:12px 14px}
+  .leaflet-popup-content .pt{font-family:var(--display);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.04em}
+  .leaflet-popup-content .pm{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+
+  section{margin-top:56px}
+  .sechead{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .sechead .rule{flex:1;height:1px;background:var(--line)}
+
+  .day{background:var(--card);border:1px solid var(--line);border-left:6px solid;padding:26px 26px 20px;margin-top:28px}
+  .day.d1{border-left-color:var(--d1)} .day.d2{border-left-color:var(--d2)}
+  .day .eyebrow{margin-bottom:6px}
+  .day h2{margin-bottom:10px}
+  .stars{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 20px}
+  .star{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;
+    border:1.5px solid;padding:3px 10px;border-radius:2px}
+  .d1 .star{color:var(--d1);border-color:var(--d1)}
+  .d2 .star{color:var(--d2);border-color:var(--d2)}
+
+  .tl{border-top:1px solid var(--line)}
+  .row{display:grid;grid-template-columns:64px 1fr;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .row .t{font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums;color:var(--muted);padding-top:2px}
+  .row .n{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.02em}
+  .row .note{font-size:15px;color:var(--muted);margin-top:2px}
+  .row .legline{margin-top:9px}
+  .meals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+  .meal{background:var(--paper);border:1px solid var(--line);padding:11px 13px;font-size:14px}
+  .meal .eyebrow{font-size:10.5px;margin-bottom:4px;display:block}
+  .daystats{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:16px;letter-spacing:.03em}
+  .daynote{font-size:14.5px;color:var(--muted);margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--line)}
+
+  .duskrule{height:4px;background:linear-gradient(90deg,var(--d1),#E0793B,var(--sign));margin-bottom:18px}
+  .spotlist{list-style:none;padding:0;margin:18px 0 0}
+  .spotlist li{padding:10px 0;border-bottom:1px solid var(--line);font-size:15.5px}
+  .spotlist b{font-family:var(--display);font-weight:700;letter-spacing:.02em}
+  .dtag{font-family:var(--mono);font-size:11px;background:var(--stone);padding:2px 7px;border-radius:2px;margin-left:6px;white-space:nowrap}
+
+  .rules{background:var(--card);border:1px solid var(--line);padding:18px 20px 18px 24px;position:relative;font-size:15.5px}
+  .rules:before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;
+    background:repeating-linear-gradient(180deg,var(--blazered) 0 14px,#fff 14px 24px)}
+  .rules b{font-family:var(--display);letter-spacing:.06em;text-transform:uppercase;font-size:14px}
+
+  .practical{background:var(--card);border:1px solid var(--line);padding:20px 22px;font-size:15.5px}
+  .practical p{margin:0 0 14px}
+  footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--muted);line-height:1.7}
+
+  @media (max-width:640px){
+    body{font-size:16px}
+    #map{height:360px}
+    .meals{grid-template-columns:1fr}
+    .day{padding:20px 16px 16px}
+    .row{grid-template-columns:52px 1fr;gap:12px}
+  }
+  @media print{
+    #map,.mapbar,.mapnote,.signpost{display:none}
+    body{background:#fff}
+    .day,.rules,.practical{border-color:#bbb}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="topbar">
+    <div class="left"><span class="blaze"></span><span class="eyebrow">Graz annex · Field plan · v2</span></div>
+    <a class="eyebrow" href="index.html" style="text-decoration:none">⌂ all trips</a>
+  </div>
+  <h1 class="title">Two days<br>in Graz</h1>
+  <p class="basecard">
+    Base: <b>Radisson Hotel Graz</b>, Annenstraße 67 <span class="elev">by the Hauptbahnhof</span>.
+    The old town is a straight 20-min walk (or ~8 min by tram) down Annenstraße, so the car sleeps in the hotel garage
+    (~€25/day) on the city day and only comes out for the gorge. Same house rules as the Salzkammergut plan:
+    10:00 start in town, 09:00 for the mountain day, dinner ~19:00 with a sunset run after if the mood strikes.
+    Sunset in Graz is around 20:00 in late August.
+  </p>
+  <nav class="signpost" aria-label="Jump to a day">
+    <a href="#day1"><span>Day 1 · Old town, alien &amp; Schlossberg</span><small>out 10:00 · on foot</small></a>
+    <a href="#day2"><span>Day 2 · Bärenschützklamm ladders</span><small>out 09:00 · 40 min</small></a>
+  </nav>
+</header>
+
+<!-- ================= MAP ================= -->
+<section id="mapsec">
+  <div class="sechead"><h2>The map</h2><div class="rule"></div></div>
+  <div class="mapbar">
+    <button class="toggle t1" data-day="1" data-on="1">Day 1 · City</button>
+    <button class="toggle t2" data-day="2" data-on="1">Day 2 · Gorge</button>
+    <button class="toggle t3" data-day="3" data-on="1">Gluten-free</button>
+  </div>
+  <div id="map"></div>
+  <p class="mapnote">Red-white-red marker = your hotel. Dashed lines show stop order, not the route — tap any pin for notes
+  and a Google&nbsp;Maps link. Topo basemap in the layers control. Map needs internet; the rest of the page works offline.</p>
+</section>
+
+<!-- ================= DAY 1 ================= -->
+<section class="day d1" id="day1">
+  <div class="eyebrow">Day 1 · City · out 10:00 · car stays parked</div>
+  <h2>Eggenberg, old town &amp; the Schlossberg</h2>
+  <div class="stars"><span class="star">★ Schloss Eggenberg</span><span class="star">★ Schlossberg at sunset</span></div>
+  <div class="tl">
+    <div class="row"><div class="t">09:00</div><div><div class="n">Slow breakfast</div>
+      <div class="note">Hotel buffet, or grab pastries at a bakery on Annenstraße on the way in.</div>
+      <div class="legline"><span class="leg foot">Tram 1 west · ~10 min</span></div></div></div>
+    <div class="row"><div class="t">10:20</div><div><div class="n">Schloss Eggenberg — your museum <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0738418,15.3916963" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your pin, promoted: the UNESCO palace with the planetary rooms — 24 state rooms of Baroque cosmology, by timed guided tour only, Tue–Sun, <b>closed Mondays</b> — book a slot. Before or after, the gardens, where the peacocks run the place. ~2 h, then tram 1 straight back to Hauptplatz.</div>
+      <div class="legline"><span class="leg foot">Tram 1 back · ~15 min</span></div></div></div>
+    <div class="row"><div class="t">13:00</div><div><div class="n">Lunch · Frankowitsch <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0706697,15.441199" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Graz institution: open-faced Brötchen at the counter with a glass of Styrian sauvignon. Closed Sundays — <b>Der Steirer</b> (Styrian tapas, everything with Kernöl) is the Sunday cover. Eating gluten-free? Skip the bread counter — the GF list further down has you covered, two of them within a 10-min walk of here.</div></div></div>
+    <div class="row"><div class="t">14:15</div><div><div class="n">Old town loop <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0712025,15.4382784" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Hauptplatz → Herrengasse → the <b>Landhaushof</b>, the Renaissance arcaded courtyard → up Sporgasse. Facades, courtyards, no tickets needed.</div></div></div>
+    <div class="row"><div class="t">15:15</div><div><div class="n">Doppelwendeltreppe <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0726987,15.4427675" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">The 500-year-old double-spiral “stairs of reconciliation” in the Burg — free, open daily 7:30–20:00, five minutes of pure geometry and the best odd photo in town. The Dom and Ferdinand II’s Mausoleum are next door — and so is Edegger-Tax at Hofgasse 6, the 1569 bakery from the gluten-free list.</div></div></div>
+    <div class="row"><div class="t">15:45</div><div><div class="n">Coffee · Das Promenade <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0723008,15.4441493" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your pin: the pavilion café at the Stadtpark edge, two minutes from the staircase — shaded terrace, good cakes, promenade people-watching. Daily from 9:00; Sundays it closes at 16:00, so flip it before lunch that day.</div>
+      <div class="legline"><span class="leg foot">Walk · 15 min</span></div></div></div>
+    <div class="row"><div class="t">16:45</div><div><div class="n">Murinsel &amp; the alien, from outside <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0731386,15.4345565" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Cross the river via the floating steel island (its little café rests Mondays) and admire the <b>Kunsthaus</b> from the bank — with Eggenberg taking the museum slot, the blue blob goes exterior-only, and honestly the outside is the show. Its best angle comes later, from above.</div>
+      <div class="legline"><span class="leg foot">Walk · 15 min</span></div></div></div>
+    <div class="row"><div class="t">17:30</div><div><div class="n">Schlossberg &amp; Uhrturm <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0735697,15.4377041" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Funicular or the glass lift up (a few euros), or the 260 zigzag stairs. Uhrturm, gardens, the red rooftops with the alien glowing below — the classic Graz frame.</div></div></div>
+    <div class="row"><div class="t">19:00</div><div><div class="n">Dinner · aiola upstairs <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0740779,15.4375683" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Right on the Schlossberg, open daily until late — book a terrace table so the sunset happens over your plates.</div></div></div>
+    <div class="row"><div class="t">20:00</div><div><div class="n">Sunset from the Schlossberg</div>
+      <div class="note">Then the stairs down — or, for the record, the Schlossbergrutsche: the world’s tallest underground slide drops you through the hill in ~40 seconds. Tram or stroll back to the hotel.</div></div></div>
+  </div>
+  <div class="meals">
+    <div class="meal"><span class="eyebrow">Breakfast</span>Hotel or Annenstraße bakery</div>
+    <div class="meal"><span class="eyebrow">Lunch</span>Frankowitsch (Mon–Sat) · Der Steirer on Sundays</div>
+    <div class="meal"><span class="eyebrow">Dinner</span>aiola upstairs · 19:00 · book a view table</div>
+  </div>
+  <div class="daystats">≈ 8 km on foot + two tram hops · 0 driving</div>
+</section>
+
+<!-- ================= DAY 2 ================= -->
+<section class="day d2" id="day2">
+  <div class="eyebrow">Day 2 · Almenland · out 09:00 · ≈40 min</div>
+  <h2>Bärenschützklamm — the ladder day</h2>
+  <div class="stars"><span class="star">★ 168 ladders &amp; 24 waterfalls</span><span class="star">★ Hochlantsch 1 720 m (optional)</span></div>
+  <div class="tl">
+    <div class="row"><div class="t">08:00</div><div><div class="n">Breakfast + pack</div>
+      <div class="note">Water is the thing today — carry ~1.5 L each (the hut on top charges for it) plus cash and sturdy shoes; the ladders stay damp with spray.</div>
+      <div class="legline"><span class="leg drive">Drive · 40 min via S35</span></div></div></div>
+    <div class="row"><div class="t">09:45</div><div><div class="n">Parkplatz P1 Bärenschützklamm, Mixnitz <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.3277662,15.3610591" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Full-day parking €6 (the €9 premium lot sits higher and trims the approach). Thu–Sun the Bärli-Express shuttle (€3 / €5 return, pay on board) also cuts ~20 min of the walk-in.</div>
+      <div class="legline"><span class="leg foot">Walk in · ≈1 h 30</span></div></div></div>
+    <div class="row"><div class="t">11:30</div><div><div class="n">Into the gorge</div>
+      <div class="note">Ticket hut at the entrance: €10 pp, cash or card, no booking. One-way traffic going up — about an hour of free-hanging wooden ladders and bridges (3,000+ rungs) past 24 waterfalls between 300 m limestone walls. Entrance closes at 16:00; short-notice closures in storms.</div>
+      <div class="legline"><span class="leg foot">Through the gorge · ≈1 h</span></div></div></div>
+    <div class="row"><div class="t">12:45</div><div><div class="n">Lunch · Almgasthaus Guter Hirte <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.3533694,15.4063452" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">The hut above the gorge exit — honest alm food, cash preferred, famously stingy with free water (hence your bottles).</div></div></div>
+    <div class="row"><div class="t">13:30</div><div><div class="n">Pick your afternoon</div>
+      <div class="note"><b>Standard:</b> down the Prügelweg back to the car — ~4.5 h round trip all in. <b>Summit version (my pick for you):</b> continue via the Schüsserlbrunn chapel, glued to its cliff, up the <b>Hochlantsch (1 720 m)</b> <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.35,15.4166667" target="_blank" rel="noopener">map ↗</a> — summit cross, Almenland panorama, ~2 h extra — then down to the Prügelweg.</div>
+      <div class="legline"><span class="leg foot">Down · 1 h 30 – 2 h</span> <span class="leg drive">Drive · 10 min</span></div></div></div>
+    <div class="row"><div class="t">16:45</div><div><div class="n">Frohnleiten — the cute-town stop <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.2709106,15.3264294" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your “opcionális cuki város”, ten minutes from the trailhead and directly on the way home — one of Austria’s prettiest small-town squares, pastel facades stacked above the Mur. Coffee or gelato on the Hauptplatz, 45 minutes, zero detour.</div>
+      <div class="legline"><span class="leg drive">Drive · 35 min + narrow hill road · 15 min</span></div></div></div>
+    <div class="row"><div class="t">18:30</div><div><div class="n">Sunset dinner · Fürstenstand <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0903774,15.3853879" target="_blank" rel="noopener">map ↗</a></div>
+      <div class="note">Your “naplemente spot”, upgraded to the finale: Graz’s house-mountain restaurant on the Plabutsch, rebuilt in 2024, the city 400 m below and the rebuilt lookout tower to climb between courses. Wed–Fri 10–21, Sat–Sun from 9, <b>closed Mon–Tue</b>. Reserve online and ask for a window or terrace table — walk-ins do get turned away, and service stretches when it’s full. The access road from Wetzelsdorf is genuinely narrow: downhill traffic yields, and the “private road” sign doesn’t apply to guests. Sunset lands ~20:00, right over your plates.</div>
+      <div class="legline"><span class="leg drive">Down the hill · 25 min · headlights on</span></div></div></div>
+    <div class="row"><div class="t">21:00</div><div><div class="n">Back at the Radisson</div>
+      <div class="note">If Fürstenstand’s closing days bite (Mon–Tue), the fallback is Landhauskeller in the vaulted rooms off yesterday’s arcaded courtyard — book — or Der Steirer on a Sunday.</div></div></div>
+  </div>
+  <p class="daynote"><b>Weather rule:</b> the gorge is a morning job and closes at short notice in heavy rain, wind or thunder —
+  if the forecast turns, swap the days or fall back to the Schöckl (Graz’s home mountain, cable car up, zero hiking) and keep
+  the ladders for a clearer sky. Dogs are not allowed in the gorge, and it’s genuinely airy in places — gloves are a nice-to-have.</p>
+  <div class="meals">
+    <div class="meal"><span class="eyebrow">Breakfast</span>Hotel · 08:00 · pack water + cash</div>
+    <div class="meal"><span class="eyebrow">Lunch</span>Almgasthaus Guter Hirte, above the gorge</div>
+    <div class="meal"><span class="eyebrow">Dinner</span>Fürstenstand · 18:30 · Wed–Sun · reserve online</div>
+  </div>
+  <div class="daystats">≈ 13–16 km on foot · ≈ 700–1 000 m up · ≈ 2 h driving</div>
+</section>
+
+<!-- ================= GLUTEN-FREE ================= -->
+<section id="glutenfree">
+  <div class="sechead"><h2>Gluten-free Graz</h2><div class="rule"></div></div>
+  <p style="font-size:15.5px;color:var(--muted);margin:0 0 6px">Graz is surprisingly good at this — there's even a 3,000-member local
+  "Glutenfrei in Graz" community keeping places honest. The picks below are celiac-aware, not just gluten-light; ochre pins on the map.
+  One magic word: say <b>“Zöliakie”</b> rather than just “glutenfrei” and kitchens switch to the careful protocol — and by law every
+  Austrian menu marks allergens with letter codes, gluten is the <b>“A”</b>.</p>
+  <ul class="spotlist">
+    <li><b>Gasthaus Lendplatzl</b> <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.074766,15.43006" target="_blank" rel="noopener">map ↗</a> —
+    the headline: nearly the whole Austrian canon gluten-free — Wiener schnitzel, Backhendl, Cordon bleu, even Kaiserschmarrn — breaded
+    with GF flour and fried in a separate fryer; celiac in the owner's family, so they get it. 4.5★ (2,100+), Mon–Sat to midnight,
+    closed Sun, and it's a 7-min walk from your hotel. One caution from the celiac community: ask about salad dressings (a soy-sauce one lurks).</li>
+    <li><b>Gasthaus Marschallhof</b> <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0729848,15.4308739" target="_blank" rel="noopener">map ↗</a> —
+    tiny old-school Wirtshaus with its own gluten-free menu; all breaded dishes made GF on request, gourmet Cordon-bleu variations,
+    and GF Austrian beer. 4.5★, also ~5 min from the Radisson — small room, call ahead (+43 676 7358700).</li>
+    <li><b>Freigeist Burger</b>, Klosterwiesgasse 2 <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0667827,15.4429211" target="_blank" rel="noopener">map ↗</a> —
+    the street-food slot: GF buns warmed in foil, <i>all</i> fries (truffle, sweet-potato included) from a fryer that never sees gluten,
+    sauces allergen-marked, plus a GF-vegan Raffaello cake. 4.5★, daily from noon.</li>
+    <li><b>AMORE LOUI Pizza Store</b>, Schmiedgasse 21 <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0687771,15.4396338" target="_blank" rel="noopener">map ↗</a> —
+    GF pizza prepped in a separate area and baked on its own tray, right in the old town, ~€12–14, daily to 21:00. Handy Day-1 quick bite.</li>
+    <li><b>Hofbäckerei Edegger-Tax</b>, Hofgasse 6 <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0724913,15.4396837" target="_blank" rel="noopener">map ↗</a> —
+    the pastry stop with history: Graz's oldest bakery (1569, imperial court supplier, that famous carved portal), literally next door to the
+    Doppelwendeltreppe, and it has carried gluten-free baked goods for 20+ years. Not a dedicated GF bakery — ask which items are
+    baked separately or sealed. Mon–Fri to 18:00, Sat to 12:30, closed Sun.</li>
+    <li><b>Maida Soulkitchen</b>, Münzgrabenstraße 45 <a class="maplink" href="https://www.google.com/maps/search/?api=1&query=47.0636267,15.4512030" target="_blank" rel="noopener">map ↗</a> —
+    a 4.8★ living-room café on the local gluten-free lists, homemade cakes and Levantine plates; small and personal, so confirm the day's
+    GF bake at the counter. Pairs well with Freigeist, two blocks away.</li>
+  </ul>
+  <p style="font-size:14.5px;color:var(--muted);margin:14px 0 0">Also useful: <b>Landhauskeller</b> — now the Day-2 bad-weather fallback — has a long
+  gluten-friendly reputation locally, so flag it when booking; and <b>Café Muhr</b> on Hauptplatz does GF cakes mid-loop, with the honest
+  footnote that the celiac community rates its care higher than Google rates its service (3.7★, slow when busy).</p>
+</section>
+
+<!-- ================= LIGHT & DRONE ================= -->
+<section id="drone">
+  <div class="sechead"><h2>Evening light &amp; drone</h2><div class="rule"></div></div>
+  <div class="duskrule"></div>
+  <div class="rules">
+    <b>Drone, short version:</b> both headline locations are no-fly — the city centre is full of uninvolved people,
+    and the gorge is a protected natural monument threaded with wooden structures and hikers. The one honest window is the
+    open <b>Almenland pasture country</b> around the Hochlantsch shoulder and Teichalm on Day 2, away from the summit crowd —
+    Austro Control Drone Space check before launch, as always. If you extend the drive home 25 min over the Teichalm,
+    the moor boardwalk and rolling pastures are the couple-shot backdrop. <span class="dtag">Mini 4 Pro</span>
+  </div>
+  <ul class="spotlist">
+    <li><b>Schlossberg / Uhrturm terraces</b> — the Day-1 sunset spot (~20:00 in late August): red rooftops, the alien glowing blue, camera only.</li>
+    <li><b>Fürstenstand tower</b> — Day 2’s sunset arrives with dinner: 360° from the rebuilt lookout, Graz to the east, green hills to the west. Restaurant grounds and people — camera only, drone stays down.</li>
+    <li><b>Murinsel at blue hour</b> — lit from within, long-exposure territory from the riverbank on the walk home.</li>
+  </ul>
+</section>
+
+<!-- ================= PRACTICAL ================= -->
+<section id="practical">
+  <div class="sechead"><h2>Practical notes</h2><div class="rule"></div></div>
+  <div class="practical">
+    <p><b>Closure grid to check against your actual dates:</b> Fürstenstand closed Mon–Tue; Eggenberg’s state-room tours, the Kunsthaus and the Murinsel café close Mondays; Frankowitsch and Lendplatzl close Sundays; the gorge runs daily May 1 – Oct 31, entrance 8:00–16:00, weather permitting. A Wed/Thu or Fri/Sat pair makes every pick on this page work at once.</p>
+    <p><b>Book three things:</b> a timed slot for the Eggenberg planetary-rooms tour, a view table at aiola upstairs for the Day 1 sunset dinner, and a window or terrace table at Fürstenstand for Day 2 — their online reservation works well, and walk-ins do get turned away. The gorge itself needs no reservation.</p>
+    <p><b>Car logistics:</b> hotel garage ~€25/day — it only moves for the gorge. Tram tickets from machines or the Verbundlinie app;
+    everything on the city day is walkable from Hauptplatz.</p>
+    <p><b>Gorge kit:</b> sturdy shoes, ~1.5 L water pp, cash for parking/entry/hut, and a dry layer — the spray is constant and glorious.</p>
+    <p>All times approximate; the gorge entrance deadline (16:00) is the only hard one, and your 09:00 start clears it with hours to spare.</p>
+  </div>
+</section>
+
+<footer>
+  Graz annex to the Salzkammergut field plan · v2 — Eggenberg, Das Promenade, Frohnleiten &amp; the Fürstenstand sunset dinner folded in · Base: Radisson Hotel Graz, Annenstraße 67 ·
+  Facts checked mid-Aug 2026 — verify day-of. Gorge info: almenland.at / steiermark.com · Gluten-free intel: gfrei.at, findmeglutenfree.com, local celiac community reports ·
+  Map © OpenStreetMap contributors · Topo © OpenTopoMap (CC-BY-SA).
+</footer>
+
+</div><!-- /wrap -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  var HOTEL = {name:"Radisson Hotel Graz", lat:47.0710959, lng:15.4197492, note:"Base · Annenstraße 67 · garage ~€25/day"};
+
+  var DAYS = [
+    { id:1, color:"#8C3B2E", label:"Day 1 · City", stops:[
+      {n:"Schloss Eggenberg", t:"10:20", lat:47.0738418, lng:15.3916963, note:"Planetary rooms by timed tour (book) + peacock gardens. Closed Mon."},
+      {n:"Frankowitsch", t:"13:00", lat:47.0706697, lng:15.441199, note:"Brötchen + Styrian wine at the counter. Closed Sun."},
+      {n:"Hauptplatz / old town loop", t:"14:15", lat:47.0712025, lng:15.4382784, note:"Herrengasse, Landhaushof, Sporgasse."},
+      {n:"Doppelwendeltreppe", t:"15:15", lat:47.0726987, lng:15.4427675, note:"Double-spiral staircase in the Burg — free, daily 7:30–20:00."},
+      {n:"Das Promenade", t:"15:45", lat:47.0723008, lng:15.4441493, note:"Stadtpark pavilion café — your pin. Sun only to 16:00."},
+      {n:"Murinsel & Kunsthaus (outside)", t:"16:45", lat:47.0731386, lng:15.4345565, note:"Floating island + the alien from the bank. Café closed Mon."},
+      {n:"Schlossberg / Uhrturm", t:"17:30", lat:47.0735697, lng:15.4377041, note:"Funicular, lift or 260 stairs. The Graz view."},
+      {n:"aiola upstairs", t:"19:00", lat:47.0740779, lng:15.4375683, note:"Sunset dinner on the Schlossberg — book a terrace table."}
+    ]},
+    { id:2, color:"#4A6A33", label:"Day 2 · Gorge", stops:[
+      {n:"Parkplatz P1 Bärenschützklamm", t:"09:45", lat:47.3277662, lng:15.3610591, note:"€6/day. Walk-in ~1.5 h; Bärli-Express shuttle Thu–Sun cuts ~20 min."},
+      {n:"Almgasthaus Guter Hirte", t:"12:45", lat:47.3533694, lng:15.4063452, note:"Lunch above the gorge exit — cash, bring your own water."},
+      {n:"Hochlantsch (optional)", t:"14:30", lat:47.35, lng:15.4166667, note:"1 720 m summit cross via the Schüsserlbrunn cliff chapel, +~2 h."},
+      {n:"Frohnleiten Hauptplatz", t:"16:45", lat:47.2709106, lng:15.3264294, note:"Your cute-town stop — pastel square over the Mur, 10 min from the trailhead."},
+      {n:"Fürstenstand", t:"18:30", lat:47.0903774, lng:15.3853879, note:"Sunset dinner over Graz · Wed–Sun · reserve online, narrow access road."}
+    ]},
+    { id:3, color:"#B8802F", label:"Gluten-free", noline:true, stops:[
+      {n:"Gasthaus Lendplatzl", t:"GF", lat:47.074766, lng:15.43006, note:"GF schnitzel, Backhendl & Kaiserschmarrn, separate fryer. Closed Sun."},
+      {n:"Gasthaus Marschallhof", t:"GF", lat:47.0729848, lng:15.4308739, note:"Own GF menu, GF Cordon bleu & Austrian GF beer. Tiny — call ahead."},
+      {n:"Freigeist Burger", t:"GF", lat:47.0667827, lng:15.4429211, note:"GF buns, gluten-free-only fryer for all fries, GF-vegan cake."},
+      {n:"AMORE LOUI Pizza", t:"GF", lat:47.0687771, lng:15.4396338, note:"GF pizza, separate prep + own baking tray. Daily to 21:00."},
+      {n:"Hofbäckerei Edegger-Tax", t:"GF", lat:47.0724913, lng:15.4396837, note:"1569 court bakery with GF baked goods — ask what's baked separately. Closed Sun."},
+      {n:"Maida Soulkitchen", t:"GF", lat:47.0636267, lng:15.4512030, note:"4.8★ living-room café, homemade GF cakes — confirm the day's bake."}
+    ]}
+  ];
+
+  var map = L.map("map", {scrollWheelZoom:false});
+  var streets = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {maxZoom:17, attribution:"&copy; OpenStreetMap contributors"});
+  var topo = L.tileLayer("https://tile.opentopomap.org/{z}/{x}/{y}.png",
+    {maxZoom:16, attribution:"&copy; OpenStreetMap contributors, SRTM | style &copy; OpenTopoMap (CC-BY-SA)"});
+  streets.addTo(map);
+  L.control.layers({"Streets":streets, "Topo":topo}, null, {position:"topright"}).addTo(map);
+
+  function gmaps(lat,lng){return "https://www.google.com/maps/search/?api=1&query="+lat+","+lng;}
+  function popup(title, meta, note, lat, lng){
+    return '<div class="pt">'+title+'</div><div class="pm">'+meta+'</div><div>'+note+'</div>'+
+           '<div style="margin-top:6px"><a href="'+gmaps(lat,lng)+'" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>';
+  }
+
+  var hotelIcon = L.divIcon({className:"", html:'<div class="hotel-icon"></div>', iconSize:[22,16], iconAnchor:[11,8]});
+  L.marker([HOTEL.lat, HOTEL.lng], {icon:hotelIcon, zIndexOffset:1000}).addTo(map)
+    .bindPopup(popup(HOTEL.name, "Base", HOTEL.note, HOTEL.lat, HOTEL.lng));
+
+  var groups = {};
+  var allPts = [[HOTEL.lat, HOTEL.lng]];
+
+  DAYS.forEach(function(day){
+    var g = L.layerGroup();
+    var line = [];
+    day.stops.forEach(function(s, i){
+      allPts.push([s.lat, s.lng]);
+      line.push([s.lat, s.lng]);
+      L.circleMarker([s.lat, s.lng], {
+        radius:9, color:"#ffffff", weight:2, fillColor:day.color, fillOpacity:0.95
+      }).bindPopup(popup(s.n, day.label+" · "+s.t, s.note, s.lat, s.lng))
+        .bindTooltip(String(i+1), {permanent:true, direction:"center", className:"numtip", opacity:1})
+        .addTo(g);
+    });
+    if(!day.noline){ L.polyline(line, {color:day.color, weight:2.5, dashArray:"6 7", opacity:0.55}).addTo(g); }
+    g.addTo(map);
+    groups[day.id] = g;
+  });
+
+  map.fitBounds(allPts, {padding:[30,30]});
+
+  var st = document.createElement("style");
+  st.textContent = ".numtip{background:transparent;border:none;box-shadow:none;color:#fff;font:700 10px/1 -apple-system,Arial,sans-serif}.numtip:before{display:none}";
+  document.head.appendChild(st);
+
+  document.querySelectorAll(".toggle").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var id = btn.getAttribute("data-day");
+      var on = btn.getAttribute("data-on") === "1";
+      if(on){ map.removeLayer(groups[id]); btn.setAttribute("data-on","0"); }
+      else  { groups[id].addTo(map);       btn.setAttribute("data-on","1"); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
